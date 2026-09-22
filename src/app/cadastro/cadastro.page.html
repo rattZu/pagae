@@ -1,0 +1,89 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Cadastro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="register-container">
+    <div class="logo">
+      <ion-icon name="person-add-outline"></ion-icon>
+    </div>
+
+    <h1>Crie sua conta</h1>
+    <p>Preencha seus dados para começar</p>
+
+    <form (ngSubmit)="register()">
+      <ion-item>
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input
+          label="Nome completo"
+          labelPlacement="floating"
+          type="text"
+          placeholder="Digite seu nome"
+          [(ngModel)]="name"
+          name="name">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input
+          label="E-mail"
+          labelPlacement="floating"
+          type="email"
+          placeholder="Digite seu e-mail"
+          [(ngModel)]="email"
+          name="email">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-input
+          label="Telefone (opcional)"
+          labelPlacement="floating"
+          type="tel"
+          placeholder="Digite seu telefone"
+          [(ngModel)]="phone"
+          name="phone">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input
+          label="Senha"
+          labelPlacement="floating"
+          type="password"
+          placeholder="Crie uma senha"
+          [(ngModel)]="password"
+          name="password">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+        <ion-input
+          label="Confirmar senha"
+          labelPlacement="floating"
+          type="password"
+          placeholder="Repita sua senha"
+          [(ngModel)]="confirmPassword"
+          name="confirmPassword">
+        </ion-input>
+      </ion-item>
+
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <ion-button expand="block" class="register-button" type="submit">
+        Criar conta
+      </ion-button>
+    </form>
+
+    <div class="login-link">
+      <span>Já possui uma conta?</span>
+      <button type="button" (click)="goLogin()">Entrar</button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button slot="start" fill="clear" (click)="back()" aria-label="Voltar">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title>Minha conta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main class="profile-container">
+    <div class="profile-icon">
+      <ion-icon name="person-circle-outline"></ion-icon>
+    </div>
+    <h1>Informações pessoais</h1>
+    <p class="intro">Mantenha seus dados atualizados para usar o Empresta.</p>
+
+    <form (ngSubmit)="save()">
+      <ion-item>
+        <ion-icon name="person-outline" slot="start"></ion-icon>
+        <ion-input label="Nome completo" labelPlacement="floating" type="text" [(ngModel)]="name" name="name"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input label="E-mail" labelPlacement="floating" type="email" [(ngModel)]="email" name="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="call-outline" slot="start"></ion-icon>
+        <ion-input label="Telefone (opcional)" labelPlacement="floating" type="tel" [(ngModel)]="phone" name="phone"></ion-input>
+      </ion-item>
+
+      <div class="password-heading">
+        <h2>Alterar senha</h2>
+        <span>Opcional</span>
+      </div>
+
+      <ion-item>
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input label="Nova senha" labelPlacement="floating" type="password" placeholder="Deixe em branco para manter" [(ngModel)]="password" name="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+        <ion-input label="Confirmar nova senha" labelPlacement="floating" type="password" [(ngModel)]="confirmPassword" name="confirmPassword"></ion-input>
+      </ion-item>
+
+      <p class="message error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="message success-message" *ngIf="successMessage">{{ successMessage }}</p>
+
+      <ion-button expand="block" class="save-button" type="submit">
+        <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+        Salvar alterações
+      </ion-button>
+      <ion-button expand="block" fill="clear" type="button" (click)="back()">Cancelar</ion-button>
+    </form>
+  </main>
+</ion-content>

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/home"></ion-back-button></ion-buttons>
+    <ion-title>Pessoas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="goHome()" aria-label="Ir para o painel"><ion-icon name="home-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" (click)="newLoan()" aria-label="Novo empréstimo"><ion-icon name="add-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main class="people-page">
+    <div class="page-heading"><div><span class="eyebrow">Sua rede</span><h1>Quem te deve</h1><p>Veja o saldo de cada pessoa em um só lugar.</p></div><div class="heading-actions"><button class="refresh-button" (click)="loadPeople()" [disabled]="loading" aria-label="Atualizar pessoas"><ion-icon name="refresh-outline"></ion-icon></button><button class="add-person" (click)="newLoan()" aria-label="Novo empréstimo"><ion-icon name="add-outline"></ion-icon></button></div></div>
+    <section class="empty-state" *ngIf="loading">
+      <h2>Carregando pessoas...</h2>
+    </section>
+    <section class="error-state" *ngIf="!loading && errorMessage">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <h2>Não foi possível carregar a lista</h2>
+      <p>{{ errorMessage }}</p>
+      <button class="primary-button" (click)="loadPeople()">Tentar novamente</button>
+    </section>
+    <section class="people-list" *ngIf="!loading && !errorMessage && peopleList.length; else emptyPeople">
+      <article class="person-card" *ngFor="let person of peopleList">
+        <div class="person-avatar">{{ initials(person.name) }}</div>
+        <div class="person-info"><h2>{{ person.name }}</h2><span>{{ person.loans }} {{ person.loans === 1 ? 'empréstimo' : 'empréstimos' }}<span *ngIf="person.phone"> · {{ person.phone }}</span></span></div>
+        <div class="person-balance"><small>{{ person.pending ? 'A receber' : 'Tudo pago' }}</small><strong [class.paid]="!person.pending">{{ formatCurrency(person.pending) }}</strong></div>
+      </article>
+    </section>
+    <ng-template #emptyPeople><section class="empty-state" *ngIf="!loading && !errorMessage"><ion-icon name="people-outline"></ion-icon><h2>Nenhuma pessoa cadastrada</h2><p>As pessoas aparecem aqui depois que você salva um empréstimo.</p><button class="primary-button" (click)="newLoan()">Novo empréstimo</button></section></ng-template>
+  </main>
+</ion-content>

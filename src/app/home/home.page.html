@@ -1,0 +1,105 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button class="menu-button" slot="start" fill="clear" (click)="toggleMenu()" aria-label="Abrir menu">
+      <ion-icon name="apps-outline"></ion-icon>
+    </ion-button>
+    <ion-title>Meu dinheiro</ion-title>
+    <ion-button slot="end" fill="clear" (click)="logout()" aria-label="Sair">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <span class="logout-label">Sair</span>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<div class="menu-backdrop" *ngIf="menuOpen" (click)="closeMenu()" aria-hidden="true"></div>
+<div class="side-menu" [class.open]="menuOpen">
+  <div class="menu-header">
+    <div class="menu-avatar">{{ userName.charAt(0).toUpperCase() }}</div>
+    <div>
+      <strong>{{ userName }}</strong>
+      <small>Conta ativa</small>
+    </div>
+    <button type="button" class="menu-close" (click)="closeMenu()" aria-label="Fechar menu">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+  </div>
+  <button type="button" (click)="dashboard()"><ion-icon name="home-outline"></ion-icon>Dashboard</button>
+  <button type="button" (click)="newLoan()"><ion-icon name="add-circle-outline"></ion-icon>Novo empréstimo</button>
+  <button type="button" (click)="people()"><ion-icon name="people-outline"></ion-icon>Pessoas</button>
+  <button type="button" (click)="profile()"><ion-icon name="person-outline"></ion-icon>Minha conta</button>
+  <button type="button" (click)="logout()"><ion-icon name="log-out-outline"></ion-icon>Sair</button>
+</div>
+
+<ion-content>
+  <main class="dashboard">
+    <section class="welcome">
+      <div>
+        <span class="eyebrow">Olá, {{ userName }}</span>
+        <h1>Controle seus empréstimos</h1>
+        <p>Tenha clareza sobre quem deve e quem já pagou.</p>
+      </div>
+      <ion-button class="add-button" (click)="newLoan()"><ion-icon slot="start" name="add-outline"></ion-icon>Novo empréstimo</ion-button>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card blue"><ion-icon name="arrow-up-circle-outline"></ion-icon><span>Total emprestado</span><strong>{{ formatCurrency(totalLent) }}</strong></article>
+      <article class="summary-card green"><ion-icon name="checkmark-circle-outline"></ion-icon><span>Total recebido</span><strong>{{ formatCurrency(totalReceived) }}</strong></article>
+      <article class="summary-card orange"><ion-icon name="time-outline"></ion-icon><span>A receber</span><strong>{{ formatCurrency(totalPending) }}</strong></article>
+    </section>
+
+    <section class="overview-card">
+      <div class="overview-header">
+        <div>
+          <span class="eyebrow">Resumo</span>
+          <h2>Progresso financeiro</h2>
+        </div>
+        <strong>{{ paidRatio }}%</strong>
+      </div>
+      <div class="chart-bars" aria-label="Gráfico financeiro">
+        <div class="bar-group" *ngFor="let item of chartData">
+          <span>{{ item.label }}</span>
+          <div class="bar-track"><div class="bar-fill" [style.height.%]="item.value" [style.background]="item.color"></div></div>
+        </div>
+      </div>
+      <div class="mini-meta">
+        <span><strong>{{ lateCount }}</strong> atrasados</span>
+        <span><strong>{{ loans.length }}</strong> registros</span>
+      </div>
+    </section>
+
+    <section class="section-heading"><div><span class="eyebrow">Acompanhe de perto</span><h2>Empréstimos</h2></div><ion-button fill="clear" size="small" (click)="people()">Ver pessoas</ion-button></section>
+    <div class="filters">
+      <button [class.active]="filter === 'all'" (click)="filter = 'all'">Todos</button>
+      <button [class.active]="filter === 'pending'" (click)="filter = 'pending'">Pendentes</button>
+      <button [class.active]="filter === 'paid'" (click)="filter = 'paid'">Pagos</button>
+      <button [class.active]="filter === 'late'" (click)="filter = 'late'">Atrasados</button>
+    </div>
+
+    <section class="loan-list" *ngIf="filteredLoans.length; else emptyState">
+      <article class="loan-card" *ngFor="let loan of filteredLoans" (click)="toggleDetails(loan.id)" tabindex="0" role="button" [attr.aria-expanded]="expandedLoanId === loan.id">
+        <div class="person-avatar">{{ initials(loan.personName) }}</div>
+        <div class="loan-main">
+          <div class="loan-heading"><div><h3>{{ loan.personName }}</h3><span>{{ loan.description || 'Empréstimo pessoal' }}</span></div><strong>{{ formatCurrency(getPending(loan)) }}</strong></div>
+          <div class="loan-meta"><span>{{ formatCurrency(loan.amount) }} no total</span><span [class.overdue]="isOverdue(loan)">{{ statusText(loan) }}</span></div>
+          <div class="progress-track"><span [style.width.%]="progress(loan)"></span></div>
+          <div class="loan-details" *ngIf="expandedLoanId === loan.id" (click)="$event.stopPropagation()">
+            <div><span>Motivo</span><strong>{{ loan.description || 'Empréstimo pessoal' }}</strong></div>
+            <div><span>Telefone</span><strong>{{ loan.personPhone || 'Não informado' }}</strong></div>
+            <div><span>Vencimento</span><strong>{{ formatDate(loan.dueDate) }}</strong></div>
+            <div *ngIf="loan.lateInterestRate"><span>Juros por atraso</span><strong>{{ loan.lateInterestRate }}%<span *ngIf="getLateInterest(loan)" > ({{ formatCurrency(getLateInterest(loan)) }})</span></strong></div>
+            <div><span>Total pago</span><strong>{{ formatCurrency(getPaid(loan)) }}</strong></div>
+            <div><span>Saldo pendente</span><strong>{{ formatCurrency(getPending(loan)) }}</strong></div>
+            <div class="payment-history" *ngIf="loan.payments.length">
+              <span>Pagamentos registrados</span>
+              <p *ngFor="let payment of loan.payments">{{ formatCurrency(payment.amount) }} em {{ formatDate(payment.date.slice(0, 10)) }}</p>
+            </div>
+          </div>
+          <div class="loan-actions" *ngIf="getPending(loan) > 0"><button class="pay-button" (click)="$event.stopPropagation(); selectForPayment(loan.id)"><ion-icon name="cash-outline"></ion-icon>Registrar pagamento</button></div>
+          <div class="loan-actions" *ngIf="expandedLoanId === loan.id"><button class="delete-button" (click)="$event.stopPropagation(); deleteLoan(loan)"><ion-icon name="trash-outline"></ion-icon>Excluir empréstimo</button></div>
+          <div class="payment-form" *ngIf="selectedLoanId === loan.id" (click)="$event.stopPropagation()"><ion-input type="number" label="Valor recebido" labelPlacement="floating" [(ngModel)]="paymentAmount" name="payment-{{ loan.id }}"></ion-input><ion-button size="small" (click)="registerPayment(loan.id)">Confirmar</ion-button><ion-button size="small" fill="clear" (click)="selectedLoanId = ''">Cancelar</ion-button></div>
+        </div>
+      </article>
+    </section>
+    <ng-template #emptyState><section class="empty-state"><ion-icon name="wallet-outline"></ion-icon><h3>Nenhum empréstimo aqui</h3><p>Adicione um empréstimo para começar a acompanhar seu dinheiro.</p><ion-button (click)="newLoan()">Adicionar empréstimo</ion-button></section></ng-template>
+  </main>
+</ion-content>

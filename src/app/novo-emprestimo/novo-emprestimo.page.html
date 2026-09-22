@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-back-button defaultHref="/home"></ion-back-button></ion-buttons>
+    <ion-title>Novo empréstimo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="goHome()" aria-label="Ir para o painel"><ion-icon name="home-outline"></ion-icon></ion-button>
+      <ion-button fill="clear" (click)="goPeople()" aria-label="Ver pessoas"><ion-icon name="people-outline"></ion-icon></ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <main class="form-page">
+    <div class="form-intro"><div class="form-icon"><ion-icon name="cash-outline"></ion-icon></div><span class="eyebrow">Registrar saída</span><h1>Quem pegou dinheiro?</h1><p>Adicione os detalhes para acompanhar esse empréstimo.</p></div>
+    <form (ngSubmit)="save()">
+      <ion-item><ion-icon name="person-outline" slot="start"></ion-icon><ion-input label="Nome da pessoa" labelPlacement="floating" placeholder="Ex.: Ana Souza" [(ngModel)]="personName" name="personName"></ion-input></ion-item>
+      <ion-item><ion-icon name="call-outline" slot="start"></ion-icon><ion-input label="Telefone (opcional)" labelPlacement="floating" type="tel" placeholder="(00) 00000-0000" [(ngModel)]="personPhone" name="personPhone"></ion-input></ion-item>
+      <ion-item><ion-icon name="cash-outline" slot="start"></ion-icon><ion-input label="Valor emprestado" labelPlacement="floating" type="number" placeholder="0,00" [(ngModel)]="amount" name="amount"></ion-input></ion-item>
+      <ion-item><ion-icon name="calendar-outline" slot="start"></ion-icon><ion-input label="Data para receber" labelPlacement="floating" type="date" [(ngModel)]="dueDate" name="dueDate"></ion-input></ion-item>
+      <ion-item><ion-icon name="cash-outline" slot="start"></ion-icon><ion-input label="Juros por atraso (opcional)" labelPlacement="floating" type="number" min="0" step="0.01" placeholder="Ex.: 2" [(ngModel)]="lateInterestRate" name="lateInterestRate"></ion-input><span slot="end">%</span></ion-item>
+      <p class="field-hint">Aplicado uma vez sobre o valor emprestado se o pagamento atrasar.</p>
+      <ion-item><ion-icon name="document-text-outline" slot="start"></ion-icon><ion-input label="Motivo (opcional)" labelPlacement="floating" placeholder="Ex.: Viagem" [(ngModel)]="description" name="description"></ion-input></ion-item>
+      <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <ion-button expand="block" type="submit" class="save-button"><ion-icon slot="start" name="checkmark-outline"></ion-icon>Salvar empréstimo</ion-button>
+    </form>
+  </main>
+</ion-content>

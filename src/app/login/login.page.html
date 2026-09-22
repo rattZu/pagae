@@ -1,0 +1,55 @@
+<ion-content [fullscreen]="true">
+
+<div class="login-container">
+<div class="logo">
+  <img src="assets/shark.png" alt="Tubarão do Pagaê" class="logo-image">
+</div>
+
+<h1>Bem-vindo ao Pagaê!</h1>
+<p>Entre na sua conta para continuar</p>
+
+<form (ngSubmit)="login()">
+<ion-item>
+  <ion-icon name="mail-outline" slot="start"></ion-icon>
+  <ion-input
+    label="E-mail"
+    labelPlacement="floating"
+    type="email"
+    placeholder="Digite seu e-mail"
+    [(ngModel)]="email"
+    name="email">
+  </ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+  <ion-input
+    label="Senha"
+    labelPlacement="floating"
+    type="password"
+    placeholder="Digite sua senha"
+    [(ngModel)]="password"
+    name="password">
+  </ion-input>
+</ion-item>
+
+<div class="forgot-password">
+  <button type="button" (click)="recoverPassword()">Esqueci minha senha</button>
+</div>
+
+<p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<ion-button expand="block" class="login-button" type="submit">
+  Entrar
+</ion-button>
+<ion-button expand="block" fill="outline" class="demo-button" type="button" (click)="loginDemo()">
+  Entrar com demonstração
+</ion-button>
+</form>
+
+<div class="register">
+  <span>Não possui uma conta?</span>
+  <button type="button" (click)="goRegister()">Criar conta</button>
+</div>
+
+</div> </ion-content>
