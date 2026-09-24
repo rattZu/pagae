@@ -4,8 +4,10 @@
 
 export const environment = {
   production: false,
-  authApiUrl: 'https://plain-bobcats-battle.loca.lt/pagae-api/auth.php'
+  authApiUrl: 'https://interest-attractions-worth-inputs.trycloudflare.com/auth',
+  loansApiUrl: 'https://interest-attractions-worth-inputs.trycloudflare.com/loans'
 };
+
 
 /*
  * For easier debugging in development mode, you can import the following file

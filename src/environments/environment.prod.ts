@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  authApiUrl: 'https://plain-bobcats-battle.loca.lt/pagae-api/auth.php'
+  authApiUrl: 'https://interest-attractions-worth-inputs.trycloudflare.com/auth',
+  loansApiUrl: 'https://interest-attractions-worth-inputs.trycloudflare.com/loans'
 };
+

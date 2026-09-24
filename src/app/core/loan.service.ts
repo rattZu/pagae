@@ -31,6 +31,7 @@ export class LoanService {
   private readonly sessionKey = 'empresta-session';
   private readonly tokenKey = 'empresta-auth-token';
   private loanCache: Loan[] = [];
+  private readonly loanActions = ['loans', 'create-loan', 'create-payment', 'delete-loan'];
 
   get currentUser(): AppUser | null {
     return localStorage.getItem(this.tokenKey) ? this.read<AppUser | null>(this.sessionKey, null) : null;
@@ -151,7 +152,8 @@ export class LoanService {
 
   private async apiRequest<T>(action: string, body: object = {}): Promise<T> {
     const token = localStorage.getItem(this.tokenKey);
-    const response = await fetch(`${environment.authApiUrl}?action=${action}`, {
+    const baseUrl = this.loanActions.includes(action) ? environment.loansApiUrl : environment.authApiUrl;
+    const response = await fetch(`${baseUrl}?action=${action}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

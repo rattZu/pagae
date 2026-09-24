@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import {
@@ -57,7 +57,7 @@ export class LoginPage {
       await this.loanService.loginDemo();
       this.router.navigate(['/home']);
     } catch {
-      this.errorMessage = 'Não foi possível conectar ao servidor do XAMPP.';
+      this.errorMessage = 'Error do servidor (500).';
       this.changeDetector.detectChanges();
     }
   }
